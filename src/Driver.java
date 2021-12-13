@@ -5,155 +5,66 @@ import java.util.ArrayList;
 
 public class Driver {
 
-    static ArrayList<Face> faces = new ArrayList<>();
-    static ArrayList<Digit> digits = new ArrayList<>();
+    static ArrayList<Face> trainingfaces = new ArrayList<>();
+    static ArrayList<Digit> trainingdigits = new ArrayList<>();
     static ArrayList<Face> testfaces = new ArrayList<>();
     static ArrayList<Digit> testdigits = new ArrayList<>();
 
-    public static void ReadTrainingFaces() {
-        try {
-            File faceDataTrain = new File("../facedata/facedatatrain");
-            File faceDataTrainLabels = new File("../facedata/facedatatrainlabels");
-            Scanner scanner = new Scanner(faceDataTrain);
-            Scanner labels = new Scanner(faceDataTrainLabels);
-            int counter = 0;
-            char[][] currentface = new char[70][60];
-            while (scanner.hasNextLine()) {
-                String data = scanner.nextLine();
-                for (int i = 0; i < 60; i++) {
-                    if (data.length() > i)
-                        currentface[counter][i] = data.charAt(i);
-                    else
-                        currentface[counter][i] = ' ';
-                }
-                counter++;
-                if (counter == 70) {
-                    Face newFace = new Face(currentface);
-                    if (Integer.parseInt(labels.nextLine()) == 1)
-                        newFace.setFace(true);
-                    else
-                        newFace.setFace(false);
-                    newFace.trainPerceptron(); // temp
-                    faces.add(newFace);
-                    counter = 0;
-                }
-
-            }
-            scanner.close();
-            labels.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Face train data not found.");
-            e.printStackTrace();
+    public static void ReadFile(char type, String imagepath, String labelpath, boolean train) {
+        int height, width;
+        if (type == 'f') {
+            height = 70;
+            width = 60;
+        } else { // type == 'd'
+            height = 28;
+            width = 28;
         }
-    }
-
-    public static void ReadFaces(String imagepath, String labelpath, boolean train) {
         try {
-            File faceData = new File(imagepath);
-            File faceDataLabels = new File(labelpath);
-            Scanner scanner = new Scanner(faceData);
-            Scanner labels = new Scanner(faceDataLabels);
+            File imageFile = new File(imagepath);
+            File labelFile = new File(labelpath);
+            Scanner pixels = new Scanner(imageFile);
+            Scanner labels = new Scanner(labelFile);
             int counter = 0;
-            char[][] currentface = new char[70][60];
-            while (scanner.hasNextLine()) {
-                String data = scanner.nextLine();
-                for (int i = 0; i < 60; i++) {
-                    if (data.length() > i)
-                        currentface[counter][i] = data.charAt(i);
+            char[][] currentImage = new char[height][width];
+            while (pixels.hasNextLine()) {
+                String line = pixels.nextLine();
+                for (int i = 0; i < width; i++) {
+                    if (line.length() > i)
+                        currentImage[counter][i] = line.charAt(i);
                     else
-                        currentface[counter][i] = ' ';
+                        currentImage[counter][i] = ' ';
                 }
                 counter++;
-                if (counter == 70) {
-                    Face newFace = new Face(currentface);
-                    if (Integer.parseInt(labels.nextLine()) == 1)
-                        newFace.setFace(true);
-                    else
-                        newFace.setFace(false);
-                    if (train)
-                        faces.add(newFace);
-                    else
-                        testfaces.add(newFace);
+                if (counter == height) { // end of image
+                    if (type == 'f') { // is face data
+                        Face newFace = new Face(currentImage);
+                        if (Integer.parseInt(labels.nextLine()) == 1)
+                            newFace.setFace(true);
+                        else
+                            newFace.setFace(false);
+                        if (train)
+                            trainingfaces.add(newFace);
+                        else
+                            testfaces.add(newFace); 
+                    }
+                    else if (type == 'd') { // is digit data
+                        Digit newDigit = new Digit(currentImage);
+                        newDigit.setValue(Integer.parseInt(labels.nextLine()));
+                        if (train) trainingdigits.add(newDigit);
+                        else testdigits.add(newDigit);
+                    }
                     counter = 0;
                 }
 
             }
-            scanner.close();
+            pixels.close();
             labels.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Face train data not found.");
-            e.printStackTrace();
-        }
-    }
-
-    public static void ReadTrainingDigits() {
-        try {
-            File digitDataTrain = new File("../digitdata/trainingimages");
-            File digitDataTrainLabels = new File("../digitdata/traininglabels");
-            Scanner scanner = new Scanner(digitDataTrain);
-            Scanner labels = new Scanner(digitDataTrainLabels);
-            int counter = 0;
-            char[][] currentdigit = new char[28][28];
-            while (scanner.hasNextLine()) {
-                String data = scanner.nextLine();
-                for (int i = 0; i < 28; i++) {
-                    if (data.length() > i)
-                        currentdigit[counter][i] = data.charAt(i);
-                    else
-                        currentdigit[counter][i] = ' ';
-                }
-                counter++;
-                if (counter == 28) {
-                    Digit newDigit = new Digit(currentdigit);
-                    if (Integer.parseInt(labels.nextLine()) == 1)
-                        newDigit.setDigit(true);
-                    else
-                        newDigit.setDigit(false);
-                    digits.add(newDigit);
-                    counter = 0;
-                }
-
-            }
-            scanner.close();
-            labels.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Digit train data not found.");
-            e.printStackTrace();
-        }
-    }
-
-    public static void ReadTestDigits() {
-        try {
-            File digitDataTrain = new File("../digitdata/trainingimages");
-            File digitDataTrainLabels = new File("../digitdata/traininglabels");
-            Scanner scanner = new Scanner(digitDataTrain);
-            Scanner labels = new Scanner(digitDataTrainLabels);
-            int counter = 0;
-            char[][] currentdigit = new char[28][28];
-            while (scanner.hasNextLine()) {
-                String data = scanner.nextLine();
-                for (int i = 0; i < 28; i++) {
-                    if (data.length() > i)
-                        currentdigit[counter][i] = data.charAt(i);
-                    else
-                        currentdigit[counter][i] = ' ';
-                }
-                counter++;
-                if (counter == 28) {
-                    Digit newDigit = new Digit(currentdigit);
-                    if (Integer.parseInt(labels.nextLine()) == 1)
-                        newDigit.setDigit(true);
-                    else
-                        newDigit.setDigit(false);
-                    digits.add(newDigit);
-                    counter = 0;
-                }
-
-            }
-            scanner.close();
-            labels.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("Digit train data not found.");
+            if (type == 'f' && train) System.out.println("Face train data not found.");
+            else if (type == 'f' && !train) System.out.println("Face test data not found.");
+            else if (type == 'd' && train) System.out.println("Digit train data not found.");
+            else if (type == 'd' && !train) System.out.println("Digit test data not found.");
+            else System.out.println("Unknown file read error.");
             e.printStackTrace();
         }
     }
@@ -174,15 +85,21 @@ public class Driver {
             classifier = args[2];
 
         if (digitsOrFaces.equals("faces")) {
-            ReadFaces("../facedata/facedatatrain", "../facedata/facedatatrainlabels", true);
-            ReadFaces("../facedata/facedatatest", "../facedata/facedatatestlabels", true);
-            BayesFaces b = new BayesFaces(faces, percentTrain, "faces", testfaces);
-            PerceptronFaces p = new PerceptronFaces(faces, testfaces);
+            ReadFile('f', "./facedata/facedatatrain", "./facedata/facedatatrainlabels", true);
+            ReadFile('f', "./facedata/facedatatest", "./facedata/facedatatestlabels", false);
+            
+            //BayesFaces b = new BayesFaces(trainingfaces, percentTrain, "faces", testfaces);
+            PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces);
+            ArrayList<Integer> pResult = p.runPerceptron();
             // } else if (digitsOrFaces.equals("digits")) {
             // ReadTrainingDigits();
             // ReadTestDigits();
             // BayesFaces b = new BayesFaces(faces, digits, percentTrain, "digits",
             // testfaces, testdigits);
+        }
+        else if (digitsOrFaces.equals("digits")) {
+            ReadFile('d', "./digitdata/trainingimages", "./digitdata/traininglabels", true);
+            ReadFile('d', "./digitdata/testimages", "./digitdata/testlabels", false);
         }
 
     }

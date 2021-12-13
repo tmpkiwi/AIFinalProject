@@ -1,10 +1,10 @@
 public class Digit {
 
     private char[][] chars;
-    private boolean isDigit;
+    public int value;
 
     public Digit(char[][] chars) {
-        System.out.print("new Digit");
+        System.out.print("New digit");
         this.chars = chars;
     }
 
@@ -12,13 +12,9 @@ public class Digit {
         return chars[r][c];
     }
 
-    public boolean isDigit() {
-        return isDigit;
-    }
 
-    public void setDigit(boolean val) {
-        System.out.println("is " + val);
-        isDigit = val;
+    public void setValue(int val) {
+        System.out.println(" equals " + val);
+        this.value = val;
     }
-
 }

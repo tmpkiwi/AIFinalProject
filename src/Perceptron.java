@@ -25,7 +25,7 @@ public class Perceptron {
     }
 
     void train(float[] inputs, int actual) {
-        int guess = guess(inputs);
+        int guess = guess(inputs); // STUCK HERE
         int error = actual - guess;
 
         for (int i = 0; i < weights.length; i++) {
