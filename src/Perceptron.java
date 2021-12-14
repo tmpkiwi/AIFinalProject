@@ -1,36 +1,50 @@
 public class Perceptron {
-    float[] weights = new float[2];
-    float learningRate = (float) 0.1;
+    int numInputs;
+    float[] weights; 
+    float learningRate = (float) 0.5;
 
-    Perceptron() {
+    Perceptron(int numInputs) {
+        this.numInputs = numInputs;
+        this.weights = new float[numInputs+1]; // +1 for bias
         // Initialize weights randomly between 0 (inclusive) and 1 (exclusive)
-        for (int i = 0; i < weights.length; i++) {
+        for (int i = 0; i < numInputs; i++) {
             weights[i] = (float) Math.random();
         }
     }
 
-    int guess(float[] inputs) {
-        float sum = 0;
-        for (int i = 0; i < weights.length; i++) {
+    int predictFace(float[] inputs) {
+        double sum = 0;
+        for (int i = 0; i < numInputs; i++) {
             sum += inputs[i] * weights[i];
         }
-        return activate(sum);
+        return activateFace(sum);
     }
 
-    int activate(float n) {
-        if (n >= .5) // if probability of being a face/digit is over 50%, return true
-            return 1;
+    double probOfDigit(float[] inputs) {
+        double sum = 0;
+        for (int i = 0; i < numInputs; i++) {
+            sum += inputs[i] * weights[i];
+        }
+        return sum;
+    }
+
+    int activateFace(double n) {
+        if (n >= 0)
+            {
+                return 1;
+            }
         else
-            return 0;
+            return -1;
     }
 
-    void train(float[] inputs, int actual) {
-        int guess = guess(inputs); // STUCK HERE
-        int error = actual - guess;
-
-        for (int i = 0; i < weights.length; i++) {
-            weights[i] += error * inputs[i] * learningRate;
+    void train(char type, float[] inputs, int actual) {
+        int predict = predictFace(inputs);
+        int error = actual - predict;
+        weights[0] += error; // increment or decrement bias by 1
+        for (int i = 0; i < numInputs; i++) {
+            weights[i+1] += error * inputs[i] * learningRate;
         }
 
     }
+
 }
