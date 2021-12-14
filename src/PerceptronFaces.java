@@ -1,16 +1,16 @@
 import java.util.ArrayList;
-import java.util.OptionalDouble;
 
 public class PerceptronFaces {
     ArrayList<Face> trainingfaces;
     ArrayList<Face> testfaces;
-    Perceptron hashtag = new Perceptron();
-    Perceptron space = new Perceptron();
+    Perceptron p = new Perceptron(4200);
 
-    public PerceptronFaces(ArrayList<Face> trainingfaces, ArrayList<Face> testfaces) {
+    public PerceptronFaces(ArrayList<Face> trainingfaces, ArrayList<Face> testfaces, int trainingIterations) {
         this.trainingfaces = trainingfaces;
         this.testfaces = testfaces;
-        trainPerceptron();      
+        for (int t=0; t<trainingIterations; t++) {
+            trainPerceptron(); // train perceptron according to user-specified number of iterations
+        }
     }
 
     private void trainPerceptron() {
@@ -19,52 +19,25 @@ public class PerceptronFaces {
             if (curr.isFace())
                 actual = 1;
             else
-                actual = 0;
-            for (int i = 0; i < 70; i++) {
-                for (int j = 0; j < 60; j++) {
-                    float[] inputs = { i, j };
-                    switch (curr.chars[i][j]) {
-                        case '#':
-                            hashtag.train(inputs, actual);
-                            break;
-                        case ' ':
-                            space.train(inputs, actual);
-                            break;
-                    }
-                }
-
-            }
+                actual = -1;
+            p.train('f', curr.pixelsAsVector, actual);
         }
     }
 
     public ArrayList<Integer> runPerceptron () {
         ArrayList<Integer> guesses = new ArrayList<Integer>();
         for (Face curr : testfaces) {
-            ArrayList<Integer> guessesPerPixel = new ArrayList<Integer>();
-            for (int i = 0; i < 70; i++) {
-                for (int j = 0; j < 60; j++) {
-                    float[] inputs = { i, j };
-                    switch (curr.chars[i][j]) {
-                        case '#':
-                            guessesPerPixel.add(hashtag.guess(inputs));
-                            break;
-                        case ' ':
-                            guessesPerPixel.add(space.guess(inputs));
-                            break;
-                    }
+                guesses.add(p.predictFace(curr.pixelsAsVector));        
                 }
-            }
-            OptionalDouble average = guessesPerPixel
-                .stream()
-                .mapToDouble(a -> a)
-                .average();
-            double avg = average.isPresent() ? average.getAsDouble() : 0;
-            if (avg >= 0.5) guesses.add(1);
-            else guesses.add(0);
-        }
-        for (Integer g : guesses) {
-            System.out.print(g+ ", ");
-        }
         return guesses;
+    }
+
+    public double percentCorrect (ArrayList<Integer> guesses) {
+        int numCorrect = 0;
+        for (int i=0; i<testfaces.size(); i++) {
+            if ((testfaces.get(i).isFace() && guesses.get(i) == 1) || (!testfaces.get(i).isFace() && guesses.get(i) == -1))
+                numCorrect++;
+        }
+        return ((double)numCorrect/testfaces.size()) * 100;
     }
 }

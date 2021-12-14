@@ -86,32 +86,33 @@ public class Driver {
         String digitsOrFaces = "digits";
         int percentTrain = 100;
         String classifier = "naiveBayes";
+        int numIterations = 3; // num training iterations for perceptron
 
         if (args.length >= 1)
             digitsOrFaces = args[0];
         if (args.length >= 2)
             percentTrain = Integer.parseInt(args[1]);
-        if (args.length == 3)
+        if (args.length >= 3)
             classifier = args[2];
+        if (args.length == 4)
+            numIterations = Integer.parseInt(args[3]);
 
         if (digitsOrFaces.equals("faces")) {
             ReadFile('f', "./facedata/facedatatrain", "./facedata/facedatatrainlabels", true);
             ReadFile('f', "./facedata/facedatatest", "./facedata/facedatatestlabels", false);
 
-            BayesFaces b = new BayesFaces(trainingfaces, percentTrain, "faces",
-                    testfaces);
-            // PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces);
-            // ArrayList<Integer> pResult = p.runPerceptron();
-            // } else if (digitsOrFaces.equals("digits")) {
-            // ReadTrainingDigits();
-            // ReadTestDigits();
-            // BayesFaces b = new BayesFaces(faces, digits, percentTrain, "digits",
-            // testfaces, testdigits);
+            BayesFaces b = new BayesFaces(trainingfaces, percentTrain, "faces",testfaces);
+            PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces, numIterations);
+            ArrayList<Integer> pResult = p.runPerceptron();
+            System.out.println("Perceptron classified faces "+p.percentCorrect(pResult)+"% correctly");
+
         } else if (digitsOrFaces.equals("digits")) {
             ReadFile('d', "./digitdata/trainingimages", "./digitdata/traininglabels", true);
             ReadFile('d', "./digitdata/testimages", "./digitdata/testlabels", false);
-            BayesDigits b = new BayesDigits(trainingdigits, percentTrain, "digits",
-                    testdigits);
+            BayesDigits b = new BayesDigits(trainingdigits, percentTrain, "digits",testdigits);
+            PerceptronDigit p = new PerceptronDigit(trainingdigits, testdigits, numIterations);
+            ArrayList<Integer> pResult = p.runPerceptron();
+            System.out.println("Perceptron classified digits "+p.percentCorrect(pResult)+"% correctly");
         }
 
     }
