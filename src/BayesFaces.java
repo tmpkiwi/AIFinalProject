@@ -4,12 +4,10 @@ public class BayesFaces {
 
     ArrayList<Face> faces, testfaces;
     int percentTrain;
-    String type;
 
-    public BayesFaces(ArrayList<Face> faces, int percentTrain, String type, ArrayList<Face> testfaces) {
+    public BayesFaces(ArrayList<Face> faces, int percentTrain, ArrayList<Face> testfaces) {
         this.faces = faces;
         this.percentTrain = percentTrain;
-        this.type = type;
         this.testfaces = testfaces;
         NaiveBayesFaces();
     }
