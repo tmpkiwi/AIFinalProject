@@ -32,10 +32,10 @@ public class PerceptronDigit {
             if (predictedDigit != actual) {
                 mlp.get(predictedDigit).weights[0] -= 1; // increment or decrement bias by 1
                 for (int p=0; p<curr.pixelsAsVector.length; p++) // update predicted digit's perceptron weights
-                    mlp.get(predictedDigit).weights[p+1] -= curr.pixelsAsVector[p] * mlp.get(predictedDigit).learningRate;
+                    mlp.get(predictedDigit).weights[p+1] -= curr.pixelsAsVector[p];
                 mlp.get(actual).weights[0] += 1;
                 for (int a=0; a<curr.pixelsAsVector.length; a++) // update actual digit's perceptron weights
-                    mlp.get(actual).weights[a+1] +=  curr.pixelsAsVector[a] * mlp.get(actual).learningRate;
+                    mlp.get(actual).weights[a+1] +=  curr.pixelsAsVector[a];
         }
                 
         }
