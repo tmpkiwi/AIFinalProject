@@ -244,6 +244,8 @@ public class BayesDigits {
 
             if (maxdigit == d.value)
                 numCorrect++;
+
+            System.out.println(numCorrect + " correct so far out of " + i);
         }
 
         System.out.println("Correct: " + numCorrect + " out of " + testdigits.size());
