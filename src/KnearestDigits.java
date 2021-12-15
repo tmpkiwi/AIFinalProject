@@ -57,10 +57,10 @@ public class KnearestDigits {
             }
         }
 
-        System.out.println("\nSorted: ");
-        for (int j = 0; j < distances.length; j++) {
-            System.out.println(distances[j] + ": " + digits.get(j).value);
-        }
+        // System.out.println("\nSorted: ");
+        // for (int j = 0; j < distances.length; j++) {
+        // System.out.println(distances[j] + ": " + digits.get(j).value);
+        // }
 
         int[] numofDigits = new int[10];
         for (int i = 0; i < k; i++) {
@@ -92,16 +92,18 @@ public class KnearestDigits {
             Digit d = testdigits.get(i);
             CalculateDistances(d);
 
-            System.out.println("Digit: " + d.value);
-            for (int j = 0; j < distances.length; j++) {
-                System.out.println(j + " " + distances[j] + ": " + digits.get(j).value);
-            }
+            // System.out.println("Digit: " + d.value);
+            // for (int j = 0; j < distances.length; j++) {
+            // System.out.println(j + " " + distances[j] + ": " + digits.get(j).value);
+            // }
 
             int a = CalculateMode(k);
 
             if (a == testdigits.get(i).value) {
                 numcorrect++;
             }
+
+            System.out.println(numcorrect + " correct so far out of " + i);
         }
 
         System.out
