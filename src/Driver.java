@@ -86,13 +86,16 @@ public class Driver {
         String digitsOrFaces = "digits";
         int percentTrain = 100;
         String classifier = "naiveBayes";
+        int numIterations = 3; // num training iterations for perceptron
 
         if (args.length >= 1)
             digitsOrFaces = args[0];
         if (args.length >= 2)
             percentTrain = Integer.parseInt(args[1]);
-        if (args.length == 3)
+        if (args.length >= 3)
             classifier = args[2];
+        if (args.length == 4)
+            numIterations = Integer.parseInt(args[3]);
 
         if (digitsOrFaces.equals("faces")) {
             ReadFile('f', "./facedata/facedatatrain", "./facedata/facedatatrainlabels", true);
@@ -102,6 +105,10 @@ public class Driver {
                 BayesFaces b = new BayesFaces(trainingfaces, percentTrain, testfaces);
             } else if (classifier.equals("kNearest")) {
                 KnearestFaces k = new KnearestFaces(trainingfaces, percentTrain, testfaces);
+            } else {
+                PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces, numIterations);
+                ArrayList<Integer> pResult = p.runPerceptron();
+                System.out.println("Perceptron classified faces " + p.percentCorrect(pResult) + "% correctly");
             }
             // PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces);
             // ArrayList<Integer> pResult = p.runPerceptron();
@@ -117,6 +124,10 @@ public class Driver {
                 BayesDigits b = new BayesDigits(trainingdigits, percentTrain, testdigits);
             } else if (classifier.equals("kNearest")) {
                 KnearestDigits k = new KnearestDigits(trainingdigits, percentTrain, testdigits);
+            } else {
+                PerceptronDigit p = new PerceptronDigit(trainingdigits, testdigits, numIterations);
+                ArrayList<Integer> pResult = p.runPerceptron();
+                System.out.println("Perceptron classified digits " + p.percentCorrect(pResult) + "% correctly");
             }
         }
 
