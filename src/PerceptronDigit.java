@@ -6,15 +6,27 @@ public class PerceptronDigit {
     ArrayList<Digit> testdigits;
     ArrayList<Perceptron> mlp = new ArrayList<Perceptron>(10);
 
-    public PerceptronDigit(ArrayList<Digit> trainingdigits, ArrayList<Digit> testdigits, int trainingIterations) {
+    public PerceptronDigit(ArrayList<Digit> trainingdigits, ArrayList<Digit> testdigits, int trainingIterations, int percentTrain) {
         this.trainingdigits = trainingdigits;
         this.testdigits = testdigits;
+        if (percentTrain != 100) {
+            int removeDigits = (trainingdigits.size() * (100 - percentTrain)) / 100;
+            removeData(removeDigits);
+        }
         for (int i=0; i<10; i++)
             mlp.add(new Perceptron(784));  // initialize multi-level perceptron
         for (int t=0; t<trainingIterations; t++) {
             trainPerceptron(); // train perceptron according to user-specified number of iterations
         }
     }
+
+    public void removeData(int removeDigits) {
+        for (int i = 0; i < removeDigits; i++) {
+            int rand = (int) (Math.random() * this.trainingdigits.size());
+            this.trainingdigits.remove(rand);
+        }
+    }
+        
 
     private void trainPerceptron() {
         for (Digit curr : trainingdigits) {
@@ -57,6 +69,10 @@ public class PerceptronDigit {
             maxProb = 0;
             guesses.add(predictedDigit);
         }
+        
+        // PRINTS PREDICTED OUTPUTS
+        //for (Integer g : guesses) System.out.println("Predicted value: "+g);
+        
         return guesses;
     }
 

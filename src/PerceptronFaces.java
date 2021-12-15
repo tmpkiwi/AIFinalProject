@@ -5,11 +5,22 @@ public class PerceptronFaces {
     ArrayList<Face> testfaces;
     Perceptron p = new Perceptron(4200);
 
-    public PerceptronFaces(ArrayList<Face> trainingfaces, ArrayList<Face> testfaces, int trainingIterations) {
+    public PerceptronFaces(ArrayList<Face> trainingfaces, ArrayList<Face> testfaces, int trainingIterations, int percentTrain) {
         this.trainingfaces = trainingfaces;
         this.testfaces = testfaces;
+        if (percentTrain != 100) {
+            int removeFaces = (trainingfaces.size() * (100 - percentTrain)) / 100;
+            removeData(removeFaces);
+        }
         for (int t=0; t<trainingIterations; t++) {
             trainPerceptron(); // train perceptron according to user-specified number of iterations
+        }
+    }
+
+    public void removeData(int removeFaces) {
+        for (int i = 0; i < removeFaces; i++) {
+            int rand = (int) (Math.random() * this.trainingfaces.size());
+            this.trainingfaces.remove(rand);
         }
     }
 
@@ -29,6 +40,8 @@ public class PerceptronFaces {
         for (Face curr : testfaces) {
                 guesses.add(p.predictFace(curr.pixelsAsVector));        
                 }
+        // PRINTS PREDICTED OUTPUTS
+        //for (Integer g : guesses) System.out.println("Predicted value: "+g);
         return guesses;
     }
 

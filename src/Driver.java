@@ -106,9 +106,9 @@ public class Driver {
             } else if (classifier.equals("kNearest")) {
                 KnearestFaces k = new KnearestFaces(trainingfaces, percentTrain, testfaces);
             } else {
-                PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces, numIterations);
+                PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces, numIterations, percentTrain);
                 ArrayList<Integer> pResult = p.runPerceptron();
-                System.out.println("Perceptron classified faces " + p.percentCorrect(pResult) + "% correctly");
+                System.out.println("Perceptron classified faces " + p.percentCorrect(pResult) + "% correctly with "+percentTrain+"% of training data.");
             }
             // PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces);
             // ArrayList<Integer> pResult = p.runPerceptron();
@@ -125,9 +125,9 @@ public class Driver {
             } else if (classifier.equals("kNearest")) {
                 KnearestDigits k = new KnearestDigits(trainingdigits, percentTrain, testdigits);
             } else {
-                PerceptronDigit p = new PerceptronDigit(trainingdigits, testdigits, numIterations);
+                PerceptronDigit p = new PerceptronDigit(trainingdigits, testdigits, numIterations, percentTrain);
                 ArrayList<Integer> pResult = p.runPerceptron();
-                System.out.println("Perceptron classified digits " + p.percentCorrect(pResult) + "% correctly");
+                System.out.println("Perceptron classified digits " + p.percentCorrect(pResult) + "% correctly with "+percentTrain+"% of training data.");
             }
         }
 
