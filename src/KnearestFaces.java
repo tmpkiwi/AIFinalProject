@@ -5,6 +5,7 @@ public class KnearestFaces {
     ArrayList<Face> faces, testfaces;
     int percentTrain;
     int[] distances;
+    double runtime = 0;
 
     public KnearestFaces(ArrayList<Face> faces, int percentTrain, ArrayList<Face> testfaces) {
         this.faces = faces;

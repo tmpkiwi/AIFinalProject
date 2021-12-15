@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class BayesDigits {
     ArrayList<Digit> digits, testdigits;
     int percentTrain;
+    long runtime = 0;
 
     public BayesDigits(ArrayList<Digit> digits, int percentTrain, ArrayList<Digit> testdigits) {
         this.digits = digits;
@@ -128,6 +129,7 @@ public class BayesDigits {
         int[][][] blackpixels = new int[10][28][28];
         int[][][] graypixels = new int[10][28][28];
 
+        long start = System.currentTimeMillis();
         for (int i = 0; i < 28; i++) {
             for (int j = 0; j < 28; j++) {
                 for (int d = 0; d < digits.size(); d++) {
@@ -142,6 +144,8 @@ public class BayesDigits {
                 }
             }
         }
+        long finish = System.currentTimeMillis();
+        this.runtime = finish - start;
 
         // int[][][] blackpixels = new int[10][7][7];
         // int[][][] graypixels = new int[10][7][7];

@@ -4,6 +4,7 @@ public class PerceptronFaces {
     ArrayList<Face> trainingfaces;
     ArrayList<Face> testfaces;
     Perceptron p = new Perceptron(4200);
+    long runtime = 0;
 
     public PerceptronFaces(ArrayList<Face> trainingfaces, ArrayList<Face> testfaces, int trainingIterations, int percentTrain) {
         this.trainingfaces = trainingfaces;
@@ -12,9 +13,12 @@ public class PerceptronFaces {
             int removeFaces = (trainingfaces.size() * (100 - percentTrain)) / 100;
             removeData(removeFaces);
         }
+        long start = System.currentTimeMillis();
         for (int t=0; t<trainingIterations; t++) {
             trainPerceptron(); // train perceptron according to user-specified number of iterations
         }
+        long finish = System.currentTimeMillis();
+        this.runtime = finish - start;
     }
 
     public void removeData(int removeFaces) {

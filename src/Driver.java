@@ -130,6 +130,40 @@ public class Driver {
                 System.out.println("Perceptron classified digits " + p.percentCorrect(pResult) + "% correctly with "+percentTrain+"% of training data.");
             }
         }
+        else if (digitsOrFaces.equals("report")) {
+            ReadFile('f', "./facedata/facedatatrain", "./facedata/facedatatrainlabels", true);
+            ReadFile('f', "./facedata/facedatatest", "./facedata/facedatatestlabels", false);
+            ReadFile('d', "./digitdata/trainingimages", "./digitdata/traininglabels", true);
+            ReadFile('d', "./digitdata/testimages", "./digitdata/testlabels", false);
+            System.out.println("------------BEGIN REPORT------------");
+            System.out.println("- Faces -");
+            for (int percent=10; percent<=100; percent+=10) {
+                PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces, numIterations, percent);
+                ArrayList<Integer> pResult = p.runPerceptron();
+                System.out.println("Perceptron classified faces " + p.percentCorrect(pResult) + "% correctly with "+percent+"% of training data.");
+                System.out.println("Training Runtime: "+p.runtime+"\n");
+                long start = System.currentTimeMillis();
+                KnearestFaces k = new KnearestFaces(trainingfaces, percent, testfaces);
+                long end = System.currentTimeMillis();
+                System.out.println("Total runtime: "+(end - start)+'\n');
+                BayesFaces b = new BayesFaces(trainingfaces, percent, testfaces);
+                System.out.println("Training Runtime: "+b.runtime+"\n");          
+            }
+            System.out.println("- Digits -");
+            for (int percent=10; percent<=100; percent+=10) {
+                PerceptronDigit p = new PerceptronDigit(trainingdigits, testdigits, numIterations, percent);
+                ArrayList<Integer> pResult = p.runPerceptron();
+                System.out.println("Perceptron classified digits " + p.percentCorrect(pResult) + "% correctly with "+percentTrain+"% of training data.");
+                System.out.println("Training Runtime: "+p.runtime+"\n");
+                long start = System.currentTimeMillis();
+                KnearestDigits k = new KnearestDigits(trainingdigits, percent, testdigits);
+                long end = System.currentTimeMillis();
+                System.out.println("Total runtime: "+(end - start)+'\n');
+                BayesDigits b = new BayesDigits(trainingdigits, percent, testdigits);
+                System.out.println("Training Runtime: "+b.runtime+"\n");          
+            }
+
+        }
 
     }
 }

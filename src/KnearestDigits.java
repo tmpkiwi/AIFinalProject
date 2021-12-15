@@ -4,6 +4,7 @@ public class KnearestDigits {
     ArrayList<Digit> digits, testdigits;
     int percentTrain;
     int[] distances;
+    long runtime = 0;
 
     public KnearestDigits(ArrayList<Digit> digits, int percentTrain, ArrayList<Digit> testdigits) {
         this.digits = digits;
@@ -103,11 +104,9 @@ public class KnearestDigits {
                 numcorrect++;
             }
 
-            System.out.println(numcorrect + " correct so far out of " + i);
+            // FOR USE DURING RUNTIME
+            //System.out.println(numcorrect + " correct so far out of " + i);
         }
-
-        System.out
-                .println("Num correct: " + numcorrect + " out of " + testdigits.size());
-
+        System.out.println("K-Nearest classified "+numcorrect + "/" + testdigits.size()+", or "+((double)numcorrect/testdigits.size()) * 100+"% of digits correctly with"+percentTrain+"% of training data.");
     }
 }
