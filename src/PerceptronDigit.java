@@ -5,6 +5,7 @@ public class PerceptronDigit {
     ArrayList<Digit> trainingdigits;
     ArrayList<Digit> testdigits;
     ArrayList<Perceptron> mlp = new ArrayList<Perceptron>(10);
+    long runtime = 0;
 
     public PerceptronDigit(ArrayList<Digit> trainingdigits, ArrayList<Digit> testdigits, int trainingIterations, int percentTrain) {
         this.trainingdigits = trainingdigits;
@@ -15,9 +16,12 @@ public class PerceptronDigit {
         }
         for (int i=0; i<10; i++)
             mlp.add(new Perceptron(784));  // initialize multi-level perceptron
-        for (int t=0; t<trainingIterations; t++) {
+        long start = System.currentTimeMillis();
+            for (int t=0; t<trainingIterations; t++) {
             trainPerceptron(); // train perceptron according to user-specified number of iterations
         }
+        long finish = System.currentTimeMillis();
+        this.runtime = finish - start;
     }
 
     public void removeData(int removeDigits) {
@@ -29,6 +33,7 @@ public class PerceptronDigit {
         
 
     private void trainPerceptron() {
+        
         for (Digit curr : trainingdigits) {
             int actual = curr.value;
             double[] probPerDigit = new double[10];
@@ -51,6 +56,7 @@ public class PerceptronDigit {
         }
                 
         }
+
     }
 
     public ArrayList<Integer> runPerceptron () {
@@ -84,4 +90,5 @@ public class PerceptronDigit {
         }
         return ((double)numCorrect/testdigits.size()) * 100;
     }
+
 }

@@ -4,6 +4,7 @@ public class BayesFaces {
 
     ArrayList<Face> faces, testfaces;
     int percentTrain;
+    long runtime = 0;
 
     public BayesFaces(ArrayList<Face> faces, int percentTrain, ArrayList<Face> testfaces) {
         this.faces = faces;
@@ -84,6 +85,7 @@ public class BayesFaces {
         int[][] faceBlackPixels = new int[70][60];
         int[][] nonfaceBlackPixels = new int[70][60];
 
+        long start = System.currentTimeMillis();
         for (int i = 0; i < 70; i++) {
             for (int j = 0; j < 60; j++) {
                 for (int f = 0; f < faces.size(); f++) {
@@ -95,6 +97,8 @@ public class BayesFaces {
                 }
             }
         }
+        long finish = System.currentTimeMillis();
+        this.runtime = finish - start;
 
         int numCorrect = 0;
 
