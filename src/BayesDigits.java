@@ -3,12 +3,10 @@ import java.util.ArrayList;
 public class BayesDigits {
     ArrayList<Digit> digits, testdigits;
     int percentTrain;
-    String type;
 
-    public BayesDigits(ArrayList<Digit> digits, int percentTrain, String type, ArrayList<Digit> testdigits) {
+    public BayesDigits(ArrayList<Digit> digits, int percentTrain, ArrayList<Digit> testdigits) {
         this.digits = digits;
         this.percentTrain = percentTrain;
-        this.type = type;
         this.testdigits = testdigits;
         NaiveBayesDigits();
     }
@@ -36,8 +34,6 @@ public class BayesDigits {
             digitprobabilities[i] = 1.00;
         }
         double zero = 1.00 / (digits.size() * 5);
-
-        boolean found = false;
 
         outerloop: for (int r = rstart; r < rend; r++) {
             for (int c = cstart; c < cend; c++) {
@@ -125,7 +121,7 @@ public class BayesDigits {
 
     public void NaiveBayesDigits() {
         if (percentTrain != 100) {
-            int removeDigits = (451 * (100 - percentTrain)) / 100;
+            int removeDigits = (5000 * (100 - percentTrain)) / 100;
             removeDigits(removeDigits);
         }
 

@@ -101,18 +101,34 @@ public class Driver {
             ReadFile('f', "./facedata/facedatatrain", "./facedata/facedatatrainlabels", true);
             ReadFile('f', "./facedata/facedatatest", "./facedata/facedatatestlabels", false);
 
-            BayesFaces b = new BayesFaces(trainingfaces, percentTrain, "faces",testfaces);
-            PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces, numIterations);
-            ArrayList<Integer> pResult = p.runPerceptron();
-            System.out.println("Perceptron classified faces "+p.percentCorrect(pResult)+"% correctly");
-
+            if (classifier.equals("naiveBayes")) {
+                BayesFaces b = new BayesFaces(trainingfaces, percentTrain, testfaces);
+            } else if (classifier.equals("kNearest")) {
+                KnearestFaces k = new KnearestFaces(trainingfaces, percentTrain, testfaces);
+            } else {
+                PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces, numIterations);
+                ArrayList<Integer> pResult = p.runPerceptron();
+                System.out.println("Perceptron classified faces " + p.percentCorrect(pResult) + "% correctly");
+            }
+            // PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces);
+            // ArrayList<Integer> pResult = p.runPerceptron();
+            // } else if (digitsOrFaces.equals("digits")) {
+            // ReadTrainingDigits();
+            // ReadTestDigits();
+            // BayesFaces b = new BayesFaces(faces, digits, percentTrain, "digits",
+            // testfaces, testdigits);
         } else if (digitsOrFaces.equals("digits")) {
             ReadFile('d', "./digitdata/trainingimages", "./digitdata/traininglabels", true);
             ReadFile('d', "./digitdata/testimages", "./digitdata/testlabels", false);
-            BayesDigits b = new BayesDigits(trainingdigits, percentTrain, "digits",testdigits);
-            PerceptronDigit p = new PerceptronDigit(trainingdigits, testdigits, numIterations);
-            ArrayList<Integer> pResult = p.runPerceptron();
-            System.out.println("Perceptron classified digits "+p.percentCorrect(pResult)+"% correctly");
+            if (classifier.equals("naiveBayes")) {
+                BayesDigits b = new BayesDigits(trainingdigits, percentTrain, testdigits);
+            } else if (classifier.equals("kNearest")) {
+                KnearestDigits k = new KnearestDigits(trainingdigits, percentTrain, testdigits);
+            } else {
+                PerceptronDigit p = new PerceptronDigit(trainingdigits, testdigits, numIterations);
+                ArrayList<Integer> pResult = p.runPerceptron();
+                System.out.println("Perceptron classified digits " + p.percentCorrect(pResult) + "% correctly");
+            }
         }
 
     }
