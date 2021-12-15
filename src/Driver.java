@@ -108,7 +108,8 @@ public class Driver {
             } else {
                 PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces, numIterations, percentTrain);
                 ArrayList<Integer> pResult = p.runPerceptron();
-                System.out.println("Perceptron classified faces " + p.percentCorrect(pResult) + "% correctly with "+percentTrain+"% of training data.");
+                System.out.println("Perceptron classified faces " + p.percentCorrect(pResult) + "% correctly with "
+                        + percentTrain + "% of training data.");
             }
             // PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces);
             // ArrayList<Integer> pResult = p.runPerceptron();
@@ -127,40 +128,105 @@ public class Driver {
             } else {
                 PerceptronDigit p = new PerceptronDigit(trainingdigits, testdigits, numIterations, percentTrain);
                 ArrayList<Integer> pResult = p.runPerceptron();
-                System.out.println("Perceptron classified digits " + p.percentCorrect(pResult) + "% correctly with "+percentTrain+"% of training data.");
+                System.out.println("Perceptron classified digits " + p.percentCorrect(pResult) + "% correctly with "
+                        + percentTrain + "% of training data.");
             }
-        }
-        else if (digitsOrFaces.equals("report")) {
+        } else if (digitsOrFaces.equals("report")) {
             ReadFile('f', "./facedata/facedatatrain", "./facedata/facedatatrainlabels", true);
             ReadFile('f', "./facedata/facedatatest", "./facedata/facedatatestlabels", false);
             ReadFile('d', "./digitdata/trainingimages", "./digitdata/traininglabels", true);
             ReadFile('d', "./digitdata/testimages", "./digitdata/testlabels", false);
             System.out.println("------------BEGIN REPORT------------");
             System.out.println("- Faces -");
-            for (int percent=10; percent<=100; percent+=10) {
-                PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces, numIterations, percent);
-                ArrayList<Integer> pResult = p.runPerceptron();
-                System.out.println("Perceptron classified faces " + p.percentCorrect(pResult) + "% correctly with "+percent+"% of training data.");
-                System.out.println("Training Runtime: "+p.runtime+"\n");
+            for (int percent = 10; percent <= 100; percent += 10) {
+                double[] perceptroncorrect = new double[5];
+                double sum = 0;
+                for (int i = 0; i < 5; i++) {
+                    PerceptronFaces p = new PerceptronFaces(trainingfaces, testfaces,
+                            numIterations, percent);
+                    ArrayList<Integer> pResult = p.runPerceptron();
+                    perceptroncorrect[i] = p.percentCorrect(pResult);
+                    sum += perceptroncorrect[i];
+                    System.out.println("Perceptron classified faces " + perceptroncorrect[i] + "%correctly with "
+                            + percent + "% of training data.");
+                    System.out.println("Training Runtime: " + p.runtime + "\n");
+                }
+                System.out.println("Mean correct: " + sum / 5);
+                sum = 0;
+                for (int i = 0; i < 5; i++) {
+                    sum += Math.pow((perceptroncorrect[i]) - sum / 5.00, 2);
+                }
+                System.out.println("Standard deviation: " + Math.sqrt(sum / 4));
                 long start = System.currentTimeMillis();
-                KnearestFaces k = new KnearestFaces(trainingfaces, percent, testfaces);
-                long end = System.currentTimeMillis();
-                System.out.println("Total runtime: "+(end - start)+'\n');
-                BayesFaces b = new BayesFaces(trainingfaces, percent, testfaces);
-                System.out.println("Training Runtime: "+b.runtime+"\n");          
+                double[] knearestcorrect = new double[5];
+                sum = 0;
+                for (int i = 0; i < 5; i++) {
+                    KnearestFaces k = new KnearestFaces(trainingfaces, percent, testfaces);
+                    knearestcorrect[i] = k.Knearest(20);
+                    sum += knearestcorrect[i];
+                    long end = System.currentTimeMillis();
+                    System.out.println("Total runtime: " + (end - start) + '\n');
+                }
+                System.out.println("Mean correct: " + sum / 5);
+                sum = 0;
+                for (int i = 0; i < 5; i++) {
+                    sum += Math.pow((knearestcorrect[i]) - sum / 5.00, 2);
+                }
+                System.out.println("Standard deviation: " + Math.sqrt(sum / 4));
+                double[] bayescorrect = new double[5];
+                sum = 0;
+                for (int i = 0; i < 5; i++) {
+                    BayesFaces b = new BayesFaces(trainingfaces, percent, testfaces);
+                    bayescorrect[i] = b.NaiveBayesFaces();
+                    sum += bayescorrect[i];
+                    System.out.println("Training Runtime: " + b.runtime + "\n");
+
+                }
+                System.out.println("Mean correct: " + sum / 5);
+                sum = 0;
+                for (int i = 0; i < 5; i++) {
+                    sum += Math.pow((bayescorrect[i]) - sum / 5.00, 2);
+                }
+                System.out.println("Standard deviation: " + Math.sqrt(sum / 4));
+
             }
             System.out.println("- Digits -");
-            for (int percent=10; percent<=100; percent+=10) {
-                PerceptronDigit p = new PerceptronDigit(trainingdigits, testdigits, numIterations, percent);
-                ArrayList<Integer> pResult = p.runPerceptron();
-                System.out.println("Perceptron classified digits " + p.percentCorrect(pResult) + "% correctly with "+percentTrain+"% of training data.");
-                System.out.println("Training Runtime: "+p.runtime+"\n");
+            for (int percent = 10; percent <= 100; percent += 10) {
+                double[] perceptroncorrect = new double[5];
+                double sum = 0;
+                for (int i = 0; i < 5; i++) {
+                    PerceptronDigit p = new PerceptronDigit(trainingdigits, testdigits, numIterations, percent);
+                    ArrayList<Integer> pResult = p.runPerceptron();
+                    perceptroncorrect[i] = p.percentCorrect(pResult);
+                    sum += perceptroncorrect[i];
+                    System.out.println("Perceptron classified faces " + perceptroncorrect[i] + "% correctly with "
+                            + percent + "% of training data.");
+                    System.out.println("Training Runtime: " + p.runtime + "\n");
+                }
+                System.out.println("Mean correct: " + sum / 5);
+                sum = 0;
+                for (int i = 0; i < 5; i++) {
+                    sum += Math.pow((perceptroncorrect[i]) - sum / 5.00, 2);
+                }
+                System.out.println("Standard deviation: " + Math.sqrt(sum / 4));
                 long start = System.currentTimeMillis();
-                KnearestDigits k = new KnearestDigits(trainingdigits, percent, testdigits);
-                long end = System.currentTimeMillis();
-                System.out.println("Total runtime: "+(end - start)+'\n');
+                double[] knearestcorrect = new double[5];
+                sum = 0;
+                for (int i = 0; i < 5; i++) {
+                    KnearestDigits k = new KnearestDigits(trainingdigits, percent, testdigits);
+                    knearestcorrect[i] = k.Knearest(100);
+                    sum += knearestcorrect[i];
+                    long end = System.currentTimeMillis();
+                    System.out.println("Total runtime: " + (end - start) + '\n');
+                }
+                System.out.println("Mean correct: " + sum / 5);
+                sum = 0;
+                for (int i = 0; i < 5; i++) {
+                    sum += Math.pow((knearestcorrect[i]) - sum / 5.00, 2);
+                }
+                System.out.println("Standard deviation: " + Math.sqrt(sum / 4));
                 BayesDigits b = new BayesDigits(trainingdigits, percent, testdigits);
-                System.out.println("Training Runtime: "+b.runtime+"\n");          
+                System.out.println("Training Runtime: " + b.runtime + "\n");
             }
 
         }

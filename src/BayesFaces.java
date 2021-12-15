@@ -7,10 +7,10 @@ public class BayesFaces {
     long runtime = 0;
 
     public BayesFaces(ArrayList<Face> faces, int percentTrain, ArrayList<Face> testfaces) {
-        this.faces = faces;
+        this.faces = new ArrayList<>(faces);
         this.percentTrain = percentTrain;
         this.testfaces = testfaces;
-        NaiveBayesFaces();
+        // NaiveBayesFaces();
     }
 
     public int TotalFaces() {
@@ -69,14 +69,15 @@ public class BayesFaces {
             }
         }
         double[] probabilites = new double[2];
-        System.out.println(
-                "faceprob:" + faceprobability + "\tnonfaceprob:" + nonfaceprobability + "\tisFace: " + f.isFace());
+        // System.out.println(
+        // "faceprob:" + faceprobability + "\tnonfaceprob:" + nonfaceprobability +
+        // "\tisFace: " + f.isFace());
         probabilites[0] = faceprobability;
         probabilites[1] = nonfaceprobability;
         return probabilites;
     }
 
-    public void NaiveBayesFaces() {
+    public double NaiveBayesFaces() {
         if (percentTrain != 100) {
             int removeFaces = (451 * (100 - percentTrain)) / 100;
             removeFaces(removeFaces);
@@ -122,10 +123,16 @@ public class BayesFaces {
             if (faceprobability < nonfaceprobability && !f.isFace())
                 numCorrect++;
 
-            System.out.println(numCorrect + " correct so far out of " + i);
+            // System.out.println(numCorrect + " correct so far out of " + i);
         }
 
         System.out.println("Correct: " + numCorrect + " out of " + testfaces.size());
+
+        System.out.println("NaiveBayes classified " + numCorrect + "/" + testfaces.size() + ", or "
+                + ((double) numCorrect / testfaces.size()) * 100 + "% of digits correctly with" + percentTrain
+                + "% of training data.");
+
+        return ((double) numCorrect / testfaces.size()) * 100;
 
     }
 

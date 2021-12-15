@@ -8,10 +8,10 @@ public class KnearestFaces {
     double runtime = 0;
 
     public KnearestFaces(ArrayList<Face> faces, int percentTrain, ArrayList<Face> testfaces) {
-        this.faces = faces;
+        this.faces = new ArrayList<>(faces);
         this.percentTrain = percentTrain;
         this.testfaces = testfaces;
-        Knearest(20);
+        // Knearest(20);
     }
 
     public void CalculateDistances(Face f) {
@@ -77,7 +77,7 @@ public class KnearestFaces {
         }
     }
 
-    public void Knearest(int k) {
+    public double Knearest(int k) {
         if (percentTrain != 100) {
             int removeFaces = (451 * (100 - percentTrain)) / 100;
             removeFaces(removeFaces);
@@ -103,11 +103,17 @@ public class KnearestFaces {
                 numcorrect++;
             }
 
-            System.out.println(numcorrect + " correct so far out of " + i);
+            // System.out.println(numcorrect + " correct so far out of " + i);
         }
 
-        System.out
-                .println("Num correct: " + numcorrect + " out of " + testfaces.size());
+        // System.out
+        // .println("Num correct: " + numcorrect + " out of " + testfaces.size());
+
+        System.out.println("K-Nearest classified " + numcorrect + "/" + testfaces.size() + ", or "
+                + ((double) numcorrect / testfaces.size()) * 100 + "% of digits correctly with" + percentTrain
+                + "% of training data.");
+
+        return ((double) numcorrect / testfaces.size()) * 100;
 
     }
 }
