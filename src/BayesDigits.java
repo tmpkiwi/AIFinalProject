@@ -3,12 +3,13 @@ import java.util.ArrayList;
 public class BayesDigits {
     ArrayList<Digit> digits, testdigits;
     int percentTrain;
+    long runtime = 0;
 
     public BayesDigits(ArrayList<Digit> digits, int percentTrain, ArrayList<Digit> testdigits) {
-        this.digits = digits;
+        this.digits = new ArrayList<>(digits);
         this.percentTrain = percentTrain;
         this.testdigits = testdigits;
-        NaiveBayesDigits();
+        // NaiveBayesDigits();
     }
 
     public void removeDigits(int removedigits) {
@@ -119,7 +120,7 @@ public class BayesDigits {
         return digitprobabilities;
     }
 
-    public void NaiveBayesDigits() {
+    public double NaiveBayesDigits() {
         if (percentTrain != 100) {
             int removeDigits = (5000 * (100 - percentTrain)) / 100;
             removeDigits(removeDigits);
@@ -128,6 +129,7 @@ public class BayesDigits {
         int[][][] blackpixels = new int[10][28][28];
         int[][][] graypixels = new int[10][28][28];
 
+        long start = System.currentTimeMillis();
         for (int i = 0; i < 28; i++) {
             for (int j = 0; j < 28; j++) {
                 for (int d = 0; d < digits.size(); d++) {
@@ -142,6 +144,8 @@ public class BayesDigits {
                 }
             }
         }
+        long finish = System.currentTimeMillis();
+        this.runtime = finish - start;
 
         // int[][][] blackpixels = new int[10][7][7];
         // int[][][] graypixels = new int[10][7][7];
@@ -245,10 +249,17 @@ public class BayesDigits {
             if (maxdigit == d.value)
                 numCorrect++;
 
-            System.out.println(numCorrect + " correct so far out of " + i);
+            // System.out.println(numCorrect + " correct so far out of " + i);
         }
 
-        System.out.println("Correct: " + numCorrect + " out of " + testdigits.size());
+        System.out.println("NaiveBayes classified " + numCorrect + "/" + testdigits.size() + ", or "
+                + ((double) numCorrect / testdigits.size()) * 100 + "% of digits correctly with " + percentTrain
+                + "% of training data.");
+
+        return ((double) numCorrect / testdigits.size()) * 100;
+
+        // System.out.println("Correct: " + numCorrect + " out of " +
+        // testdigits.size());
 
     }
 

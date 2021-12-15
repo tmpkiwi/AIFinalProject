@@ -9,7 +9,7 @@ public class Face {
         this.chars = chars;
         this.pixelsAsVector = vector();
     }
-
+// i hate this
     /**
      * Transforms the 2D array of pixels into a 1D vector of chars, then maps chars
      * to integers based on symbol.
