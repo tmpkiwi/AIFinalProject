@@ -109,13 +109,16 @@ public class BayesFaces {
                 else
                     nonfaceprobability += 1;
             }
-            System.out.println("Total faceprob: " + faceprobability + "\tTotal nonfaceprob: " + nonfaceprobability
-                    + "\tisFace: " + f.isFace());
+            // System.out.println("Total faceprob: " + faceprobability + "\tTotal
+            // nonfaceprob: " + nonfaceprobability
+            // + "\tisFace: " + f.isFace());
 
             if (faceprobability > nonfaceprobability && f.isFace())
                 numCorrect++;
             if (faceprobability < nonfaceprobability && !f.isFace())
                 numCorrect++;
+
+            System.out.println(numCorrect + " correct so far out of " + i);
         }
 
         System.out.println("Correct: " + numCorrect + " out of " + testfaces.size());

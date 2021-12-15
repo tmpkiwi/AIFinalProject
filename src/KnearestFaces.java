@@ -51,10 +51,10 @@ public class KnearestFaces {
             }
         }
 
-        System.out.println("\nSorted: ");
-        for (int j = 0; j < distances.length; j++) {
-            System.out.println(distances[j] + ": " + faces.get(j).isFace());
-        }
+        // System.out.println("\nSorted: ");
+        // for (int j = 0; j < distances.length; j++) {
+        // System.out.println(distances[j] + ": " + faces.get(j).isFace());
+        // }
 
         int numfaces = 0;
         for (int i = 0; i < k; i++) {
@@ -82,30 +82,31 @@ public class KnearestFaces {
             removeFaces(removeFaces);
         }
 
-        int numcorrectfaces = 0;
-        int numcorrectnonfaces = 0;
+        int numcorrect = 0;
 
         for (int i = 0; i < testfaces.size(); i++) {
             Face f = testfaces.get(i);
             CalculateDistances(f);
 
-            System.out.println("Face: " + f.isFace());
-            for (int j = 0; j < distances.length; j++) {
-                System.out.println(j + " " + distances[j] + ": " + faces.get(j).isFace());
-            }
+            // System.out.println("Face: " + f.isFace());
+            // for (int j = 0; j < distances.length; j++) {
+            // System.out.println(j + " " + distances[j] + ": " + faces.get(j).isFace());
+            // }
 
             int a = CalculateMode(k);
 
             if (a == 0 && testfaces.get(i).isFace()) {
-                numcorrectfaces++;
+                numcorrect++;
             }
             if (a == 1 && !testfaces.get(i).isFace()) {
-                numcorrectnonfaces++;
+                numcorrect++;
             }
+
+            System.out.println(numcorrect + " correct so far out of " + i);
         }
 
         System.out
-                .println("Num correct: " + numcorrectfaces + ", " + numcorrectnonfaces + " out of " + testfaces.size());
+                .println("Num correct: " + numcorrect + " out of " + testfaces.size());
 
     }
 }
